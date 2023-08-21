@@ -19,7 +19,7 @@ app.use("/time", rotaTime);
 app.use("/usuarios", rotaUsuario); */
 
 app.listen(porta, hostname, () => {
-  console.log(`API escutando no link: http://${hostname}:${porta}/time`);
+  console.log(`API escutando no link: https://${hostname}:${porta}/time`);
 });
 
 /* app.listen(3007, "localhost", () => {
