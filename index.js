@@ -5,7 +5,7 @@ import rotaTime from "./Rotas/rotaTime.js";
 import rotaUsuario from "./Rotas/rotaUsuario.js"; */
 
 const hostname = "0.0.0.0";
-const porta = "aluno2-pfsii";
+const porta = "4002";
 
 const app = express();
 
