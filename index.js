@@ -7,6 +7,7 @@ const app = express();
 
 const host = "0.0.0.0";
 const port = "4002";
+const port2 = "4045";
 
 app.use(cors({ origin: "*" }));
 
@@ -20,5 +21,5 @@ app.listen(port, host, () => {
 });
 
 app.listen(port, host, () => {
-  console.log(`API escutando no link: https://${host}/${5000}/usuario`);
+  console.log(`API escutando no link: https://${host}/${port2}/usuario`);
 });
