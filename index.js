@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-/* import rotaAgendamento from "./Rotas/rotaAgendamento.js"; */
+import rotaAgendamento from "./Rotas/rotaAgendamento.js";
 import rotaUsuario from "./Rotas/rotaUsuario.js";
 
 const app = express();
@@ -12,13 +12,13 @@ app.use(cors({ origin: "*" }));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-/* app.use("/agendamento", rotaAgendamento); */
+app.use("/agendamento", rotaAgendamento);
 app.use("/usuario", rotaUsuario);
 
-/* app.listen(port, host, () => {
+app.listen(port, host, () => {
   console.log(`API escutando no link: https://${host}/${port}/agendamento`);
-}); */
+});
 
 app.listen(port, host, () => {
-  console.log(`API escutando no link: https://${host}/${port}/usuario`);
+  console.log(`API escutando no link: https://${host}/${5000}/usuario`);
 });
