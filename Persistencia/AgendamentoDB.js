@@ -8,7 +8,7 @@ export default class AgendamentoDB {
             const conexao = await conectar();
             const sql = "INSERT INTO agendamento (campo, data, horario, usuario) \
                                            VALUES(?, ?, ?, ?)";
-            const valores = [agendamento.id, agendamento.id, agendamento.campo, agendamento.data,
+            const valores = [agendamento.id, agendamento.campo, agendamento.data,
             agendamento.horario, agendamento.usuario];
             await conexao.query(sql, valores);
         }
