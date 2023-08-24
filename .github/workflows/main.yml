@@ -22,7 +22,6 @@ jobs:
     env:
       USUARIO: aluno2-pfsii
       SENHA: aluno2-pfsii
-      PORTA: 3224
     if: github.ref == 'refs/heads/main'
     needs: [deploy-init]
     runs-on: ubuntu-latest
