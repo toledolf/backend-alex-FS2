@@ -13,12 +13,12 @@ app.use(cors({ origin: "*" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 /* app.use("/agendamento", rotaAgendamento); */
-app.use("/usuarios", rotaUsuario);
+app.use("/usuario", rotaUsuario);
 
 /* app.listen(port, host, () => {
   console.log(`API escutando no link: https://${host}/${port}/agendamento`);
 }); */
 
 app.listen(port, host, () => {
-  console.log(`API escutando no link: https://${host}/${port}/usuarios`);
+  console.log(`API escutando no link: https://${host}/${port}/usuario`);
 });
