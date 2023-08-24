@@ -1,8 +1,7 @@
 import cors from "cors";
 import express from "express";
-import rotaAgendamento from "./Rotas/rotaAgendamento.js";
-/* import rotaTreinador from "./Rotas/rotaTreinador.js"; */
-/* import rotaUsuario from "./Rotas/rotaUsuario.js"; */
+/* import rotaAgendamento from "./Rotas/rotaAgendamento.js"; */
+import rotaUsuario from "./Rotas/rotaUsuario.js";
 
 const app = express();
 
@@ -13,23 +12,13 @@ app.use(cors({ origin: "*" }));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use("/agendamento", rotaAgendamento);
-/* app.use("/treinador", rotaTreinador); */
-/* app.use("/usuario", rotaUsuario); */
-
-app.listen(port, host, () => {
-  console.log(`API escutando no link: https://${host}/${port}/agendamento`);
-});
+/* app.use("/agendamento", rotaAgendamento); */
+app.use("/usuarios", rotaUsuario);
 
 /* app.listen(port, host, () => {
-  console.log(`API escutando no link: https://${host}/${port}/usuario`);
+  console.log(`API escutando no link: https://${host}/${port}/agendamento`);
 }); */
 
-/* app.listen(3007, "localhost", () => {
-  console.log("API escutando no link: http://localhost:3006/treinador");
+app.listen(port, host, () => {
+  console.log(`API escutando no link: https://${host}/${port}/usuarios`);
 });
-
-app.listen(3006, "localhost", () => {
-  console.log("API escutando no link: http://localhost:3007/usuarios");
-});
- */
