@@ -6,7 +6,7 @@ export default class Agendamento {
     #horario;
     #usuario;
 
-    constructor(id, campo, data, usuario, horario) {
+    constructor(id, campo, data, horario, usuario) {
         this.#id = id;
         this.#campo = campo;
         this.#data = data;
