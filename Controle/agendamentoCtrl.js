@@ -14,7 +14,7 @@ export default class AgendamentoCTRL {
         .consultaCodigo(cpfUsuario)
         .then((usuario) => {
           if (usuario) {
-            const agendamento = new Agendamento(0, campo, data, horario, usuario)
+            const agendamento = new Agendamento(0, campo, data, horario, cpfUsuario)
               .gravar(() => {
                 resp.json({
                   status: true,
@@ -88,7 +88,7 @@ export default class AgendamentoCTRL {
         .consultaCodigo(cpfUsuario)
         .then((usuario) => {
           if (usuario) {
-            const agendamento = new Agendamento(0, campo, data, horario, usuario)
+            const agendamento = new Agendamento(0, campo, data, horario, cpfUsuario)
               .gravar(() => {
                 resp.json({
                   status: true,
