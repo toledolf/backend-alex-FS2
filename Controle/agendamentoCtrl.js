@@ -83,7 +83,7 @@ export default class AgendamentoCTRL {
       const campo = dados.campo;
       const data = dados.data;
       const horario = dados.horario;
-      const cpfUsuario = dados.usuario.codigo;
+      const cpfUsuario = dados.cpfUsuario.codigo;
       const usuario = new Usuario(0, "")
         .consultaCodigo(cpfUsuario)
         .then((usuario) => {
