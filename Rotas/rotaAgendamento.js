@@ -8,6 +8,6 @@ rotaAgendamento.get('/', agendamentoCtrl.consultar)
   .post('/', agendamentoCtrl.gravar)
   .put('/', agendamentoCtrl.atualizar)
   .delete('/', agendamentoCtrl.excluir)
-  .get('/:id', agendamentoCtrl.consultarPorId);
+  .get('/:codigo', agendamentoCtrl.consultarPorCodigo);
 
 export default rotaAgendamento;

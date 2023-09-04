@@ -1,94 +1,93 @@
-import AgendamentoBD from '../Persistencia/AgendamentoDB.js'
+import AgendamentoBD from "../Persistencia/AgendamentoDB.js";
 export default class Agendamento {
-    #id;
-    #campo;
-    #data;
-    #horario;
-    #usuario;
+  #codigo;
+  #campo;
+  #data;
+  #horario;
+  #cpfUsuario;
 
-    constructor(id, campo, data, horario, usuario) {
-        this.#id = id;
-        this.#campo = campo;
-        this.#data = data;
-        this.#horario = horario;
-        this.#usuario = usuario;
+  constructor(codigo, campo, data, horario, cpfUsuario) {
+    this.#codigo = codigo;
+    this.#campo = campo;
+    this.#data = data;
+    this.#horario = horario;
+    this.#cpfUsuario = cpfUsuario;
+  }
 
-    }
+  get codigo() {
+    return this.#codigo;
+  }
 
-    get id() {
-        return this.#id;
-    }
+  set codigo(novoCodigo) {
+    this.#codigo = novoCodigo;
+  }
 
-    set id(novoId) {
-        this.#id = novoId;
-    }
+  get campo() {
+    return this.#campo;
+  }
 
-    get campo() {
-        return this.#campo;
-    }
+  set campo(novoCampo) {
+    this.#campo = novoCampo;
+  }
 
-    set campo(novoCampo) {
-        this.#campo = novoCampo;
-    }
+  get data() {
+    return this.#data;
+  }
 
-    get data() {
-        return this.#data;
-    }
+  set data(novaData) {
+    this.#data = novaData;
+  }
 
-    set data(novaData) {
-        this.#data = novaData;
-    }
+  get horario() {
+    return this.#horario;
+  }
 
-    get horario() {
-        return this.#horario;
-    }
+  set horario(novoHorario) {
+    this.#horario = novoHorario;
+  }
 
-    set horario(novoHorario) {
-        this.#horario = novoHorario;
-    }
+  get cpfUsuario() {
+    return this.#cpfUsuario;
+  }
 
-    get usuario() {
-        return this.#usuario;
-    }
+  set cpfUsuario(novoCpfUsuario) {
+    this.#cpfUsuario = novoCpfUsuario;
+  }
 
-    set usuario(novoUsuario) {
-        this.#usuario = novoUsuario;
-    }
+  toJSON() {
+    return {
+      codigo: this.#codigo,
+      campo: this.#campo,
+      data: this.#data,
+      horario: this.#horario,
+      cpfUsuario: this.#cpfUsuario,
+    };
+  }
 
-    toJSON() {
-        return {
-            "id"      : this.#id,
-            "campo"   : this.#campo,
-            "data"    : this.#data,
-            "horario" : this.#horario,
-            "usuario" : this.#usuario,
-        }
-    }
+  async gravar() {
+    const agendamentoBD = new AgendamentoBD();
+    await agendamentoBD.inserirDados(this);
+  }
 
-    async gravar() {
-        const agendamentoBD = new AgendamentoBD();
-        await agendamentoBD.inserirDados(this);
-    }
+  async atualizar() {
+    const agendamentoBD = new AgendamentoBD();
+    await agendamentoBD.alterarDados(this);
+  }
 
-    async atualizar() {
-        const agendamentoBD = new AgendamentoBD();
-        await agendamentoBD.alterarDados(this);
-    }
+  async excluirDados() {
+    const agendamentoBD = new AgendamentoBD();
+    await agendamentoBD.excluirDados(this);
+  }
 
-    async excluirDados() {
-        const agendamentoBD = new AgendamentoBD();
-        await agendamentoBD.excluirDados(this);
-    }
+  async consultar(especificidade) {
+    const agendamentoBD = new AgendamentoBD();
+    const agendamentos = await agendamentoBD.consultarDados(especificidade);
+    return agendamentos;
+  }
 
-    async consultar(especificidade) {
-        const agendamentoBD = new AgendamentoBD();
-        const agendamentos = await agendamentoBD.consultarDados(especificidade);
-        return agendamentos;
-    }
-
-    async consultarId(id) {
-        const agendamentoBD = new AgendamentoBD();
-        const agendamentos = await agendamentoBD.consultarId(id);
-        return agendamentos;
-    }
+  async consultarId(codigo) {
+    const agendamentoBD = new AgendamentoBD();
+    const agendamentos = await agendamentoBD.consultarId(codigo);
+    return agendamentos;
+  }
 }

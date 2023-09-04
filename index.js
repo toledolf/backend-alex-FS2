@@ -15,10 +15,6 @@ app.use(express.json());
 app.use("/agendamento", rotaAgendamento);
 app.use("/usuario", rotaUsuario);
 
-/* app.listen(port, host, () => {
-  console.log(`API escutando no link: https://${host}/${port}/agendamento`);
-}); */
-
 app.listen(port, host, () => {
   console.log(`API escutando no link: https://${host}/${port}`);
 });
