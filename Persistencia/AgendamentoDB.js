@@ -73,21 +73,21 @@ export default class AgendamentoDB {
     return listaAgendamentos;
   }
 
-  async consultarId(id) {
+  async consultarId(codigo) {
     const conexao = await conectar();
-    const sql = "SELECT * FROM agendamento WHERE id =  ?";
-    const valores = [id];
+    const sql = "SELECT * FROM agendamento WHERE codigo =  ?";
+    const valores = [codigo];
     const [rows] = await conexao.query(sql, valores);
     global.poolConexoes.pool.releaseConnection(conexao);
 
     const listaAgendamentos = [];
     for (const row of rows) {
       const agendamento = new Agendamento(
-        row["id"],
+        row["codigo"],
         row["campo"],
         row["data"],
         row["horario"],
-        row["usuario"]
+        row["cpfUsuario"]
       );
       listaAgendamentos.push(agendamento);
     }
