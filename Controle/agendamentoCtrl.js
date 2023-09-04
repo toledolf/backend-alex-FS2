@@ -4,7 +4,7 @@ import Usuario from "../Modelo/Usuario.js";
 export default class AgendamentoCTRL {
   gravar(req, resp) {
     resp.type("application/json");
-    if (req.method === "POST" && req.is("application/json")) {
+    if (req.method === "POST") {
       const dados = req.body;
       const campo = dados.campo;
       const data = dados.data;
@@ -77,7 +77,7 @@ export default class AgendamentoCTRL {
 
   atualizar(req, resp) {
     resp.type("application/json");
-    if (req.method === "PUT" && req.is("application/json")) {
+    if (req.method === "PUT") {
       const dados = req.body;
       const codigo = dados.codigo;
       const campo = dados.campo;
@@ -152,7 +152,7 @@ export default class AgendamentoCTRL {
 
   excluir(req, resp) {
     resp.type("application/json");
-    if (req.method === "DELETE" && req.is("application/json")) {
+    if (req.method === "DELETE") {
       const dados = req.body;
       const codigo = dados.codigo;
       if (codigo) {
