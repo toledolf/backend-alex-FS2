@@ -1,4 +1,5 @@
 import Agendamento from "../Modelo/Agendamento.js";
+import Usuario from "../Modelo/Usuario.js";
 import conectar from "./Conexao.js";
 
 export default class AgendamentoDB {
