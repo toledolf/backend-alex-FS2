@@ -67,6 +67,7 @@ export default class AgendamentoDB {
         row["data"],
         row["horario"],
         row["cpfUsuario"],
+        row["nomeUsuario"],
         usuario
       );
       listaAgendamentos.push(agendamento);
@@ -88,7 +89,8 @@ export default class AgendamentoDB {
         row["campo"],
         row["data"],
         row["horario"],
-        row["cpfUsuario"]
+        row["cpfUsuario"],
+        row["nomeUsuario"],
       );
       listaAgendamentos.push(agendamento);
     }

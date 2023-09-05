@@ -5,13 +5,15 @@ export default class Agendamento {
   #data;
   #horario;
   #cpfUsuario;
+  #nomeUsuario
 
-  constructor(codigo, campo, data, horario, cpfUsuario) {
+  constructor(codigo, campo, data, horario, cpfUsuario, nomeUsuario) {
     this.#codigo = codigo;
     this.#campo = campo;
     this.#data = data;
     this.#horario = horario;
     this.#cpfUsuario = cpfUsuario;
+    this.#nomeUsuario = nomeUsuario;
   }
 
   get codigo() {
@@ -54,6 +56,14 @@ export default class Agendamento {
     this.#cpfUsuario = novoCpfUsuario;
   }
 
+  get nomeUsuario() {
+    return this.#nomeUsuario;
+  }
+
+  set nomeUsuario(novoNomeUsuario) {
+    this.#nomeUsuario = novoNomeUsuario;
+  }
+
   toJSON() {
     return {
       codigo: this.#codigo,
@@ -61,6 +71,7 @@ export default class Agendamento {
       data: this.#data,
       horario: this.#horario,
       cpfUsuario: this.#cpfUsuario,
+      nomeUsuario: this.#nomeUsuario,
     };
   }
 
