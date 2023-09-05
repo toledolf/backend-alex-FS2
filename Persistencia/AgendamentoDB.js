@@ -14,7 +14,7 @@ export default class AgendamentoDB {
         agendamento.campo,
         agendamento.data,
         agendamento.horario,
-        agendamento.cpfUsuario,
+        agendamento.usuario.cpf,
       ];
       await conexao.query(sql, valores);
       global.poolConexoes.pool.releaseConnection(conexao);
