@@ -9,7 +9,7 @@ export default class AgendamentoCTRL {
       const campo = dados.campo;
       const data = dados.data;
       const horario = dados.horario;
-      const cpfUsuario = dados.cpf;
+      const cpfUsuario = dados.cpfUsuario;
       const usuario = new Usuario(0, "")
         .consultarCPF(cpfUsuario)
         .then((usuario) => {
