@@ -11,44 +11,41 @@ export default class AgendamentoCTRL {
       const horario = dados.horario;
       const cpfUsuario = dados.cpfUsuario;
       const nomeUsuario = dados.nomeUsuario;
-      const usuario = new Usuario(0, "")
-        .consultarPeloCPF(usuario)
-        .then((usuario) => {
-          if (usuario) {
-            const agendamento = new Agendamento(
-              0,
-              campo,
-              data,
-              horario,
-              cpfUsuario,
-              nomeUsuario
-            )
-              .gravar(() => {
-                resp.json({
-                  status: true,
-                  codigo: agendamento.codigo,
-                  mensagem: "Agendamento efetivado com sucesso!",
-                });
-              })
-              .catch((err) => {
-                resp.json({
-                  status: false,
-                  mensagem: err,
-                });
+      Usuario.consultarPeloCPF(cpfUsuario, (usuario) => {
+        if (usuario) {
+          const agendamento = new Agendamento(
+            0,
+            campo,
+            data,
+            horario,
+            cpfUsuario,
+            nomeUsuario
+          )
+            .gravar(() => {
+              resp.json({
+                status: true,
+                codigo: agendamento.codigo,
+                mensagem: "Agendamento efetivado com sucesso!",
               });
-          } else {
-            resp.json({
-              status: false,
-              mensagem: "Usuário não encontrato!",
+            })
+            .catch((err) => {
+              resp.json({
+                status: false,
+                mensagem: err,
+              });
             });
-          }
-        })
-        .catch((err) => {
+        } else {
           resp.json({
             status: false,
-            mensagem: err,
+            mensagem: "Usuário não encontrato!",
           });
+        }
+      }).catch((err) => {
+        resp.json({
+          status: false,
+          mensagem: err,
         });
+      });
       /* if (campo && data && horario && usuario) {
         const agendamento = new Agendamento(campo, data, horario, usuario);
         agendamento
