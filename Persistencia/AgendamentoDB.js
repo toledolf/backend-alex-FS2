@@ -7,14 +7,15 @@ export default class AgendamentoDB {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
       const sql =
-        "INSERT INTO agendamento (campo, data, horario, cpfUsuario) \
-                                           VALUES(?, ?, ?, ?)";
+        "INSERT INTO agendamento (campo, data, horario, cpfUsuario, nomeUsuario) \
+                                           VALUES(?, ?, ?, ?, ?)";
       const valores = [
         agendamento.codigo,
         agendamento.campo,
         agendamento.data,
         agendamento.horario,
         agendamento.usuario.cpf,
+        agendamento.nomeUsuario,
       ];
       await conexao.query(sql, valores);
       global.poolConexoes.pool.releaseConnection(conexao);
@@ -90,7 +91,7 @@ export default class AgendamentoDB {
         row["data"],
         row["horario"],
         row["cpfUsuario"],
-        row["nomeUsuario"],
+        row["nomeUsuario"]
       );
       listaAgendamentos.push(agendamento);
     }

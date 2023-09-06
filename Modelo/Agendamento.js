@@ -5,7 +5,7 @@ export default class Agendamento {
   #data;
   #horario;
   #cpfUsuario;
-  #nomeUsuario
+  #nomeUsuario;
 
   constructor(codigo, campo, data, horario, cpfUsuario, nomeUsuario) {
     this.#codigo = codigo;
