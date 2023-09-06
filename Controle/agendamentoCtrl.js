@@ -12,7 +12,7 @@ export default class AgendamentoCTRL {
       const cpfUsuario = dados.cpfUsuario;
       const nomeUsuario = dados.nomeUsuario;
       const usuario = new Usuario(0, "")
-        .consultarCPF(cpfUsuario)
+        .consultarPeloCPF(usuario)
         .then((usuario) => {
           if (usuario) {
             const agendamento = new Agendamento(
