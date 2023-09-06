@@ -9,43 +9,46 @@ export default class AgendamentoCTRL {
       const campo = dados.campo;
       const data = dados.data;
       const horario = dados.horario;
-      const cpfUsuario = dados.cpfUsuario;
       const nomeUsuario = dados.nomeUsuario;
-      Usuario.consultarPeloCPF(cpfUsuario, (usuario) => {
-        if (usuario) {
-          const agendamento = new Agendamento(
-            0,
-            campo,
-            data,
-            horario,
-            cpfUsuario,
-            nomeUsuario
-          )
-            .gravar(() => {
-              resp.json({
-                status: true,
-                codigo: agendamento.codigo,
-                mensagem: "Agendamento efetivado com sucesso!",
+      const cpfUsuario = dados.cpfUsuario;
+      const usuario = new Usuario(0, "")
+        .consultar(usuario)
+        .then((usuario) => {
+          if (usuario) {
+            const agendamento = new Agendamento(
+              0,
+              campo,
+              data,
+              horario,
+              nomeUsuario,
+              cpfUsuario
+            )
+              .gravar(() => {
+                resp.json({
+                  status: true,
+                  codigo: agendamento.codigo,
+                  mensagem: "Agendamento efetivado com sucesso!",
+                });
+              })
+              .catch((err) => {
+                resp.json({
+                  status: false,
+                  mensagem: err,
+                });
               });
-            })
-            .catch((err) => {
-              resp.json({
-                status: false,
-                mensagem: err,
-              });
+          } else {
+            resp.json({
+              status: false,
+              mensagem: "Usuário não encontrato!",
             });
-        } else {
+          }
+        })
+        .catch((err) => {
           resp.json({
             status: false,
-            mensagem: "Usuário não encontrato!",
+            mensagem: err,
           });
-        }
-      }).catch((err) => {
-        resp.json({
-          status: false,
-          mensagem: err,
         });
-      });
       /* if (campo && data && horario && usuario) {
         const agendamento = new Agendamento(campo, data, horario, usuario);
         agendamento
