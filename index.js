@@ -20,7 +20,7 @@ app.use("/usuario", rotaUsuario);
   console.log(`API escutando no link: http://${host}/${port}/agendamento`);
 }); */
 app.listen(port, host, () => {
-  console.log(`API escutando no link: http://${host}/${port2}`);
+  console.log(`API escutando no link: http://${host}/${port}`);
 });
 
 /* app.listen(3007, 'localhost', () => {
