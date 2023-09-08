@@ -6,18 +6,19 @@ export default class AgendamentoDB {
   async inserirDados(agendamento) {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
-      const sql =
-        "INSERT INTO agendamento (campo, data, horario, nomeUsuario, cpfUsuario ) \
-                                           VALUES(?, ?, ?, ?, ?)";
+      if (conexao) {
+        const sql =
+        "INSERT INTO agendamento (campo, data, horario, cpfUsuario) \
+                                           VALUES(?, ?, ?, ?)";
       const valores = [
-        agendamento.codigo,
         agendamento.campo,
         agendamento.data,
         agendamento.horario,
-        agendamento.nomeUsuario,
-        agendamento.usuario.cpf,
+        agendamento.cpfUsuario,
       ];
       await conexao.query(sql, valores);
+      }
+      
       global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
@@ -37,7 +38,7 @@ export default class AgendamentoDB {
         agendamento.codigo,
       ];
       await conexao.query(sql, valores);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      /* global.poolConexoes.pool.releaseConnection(conexao); */
     }
   }
 
@@ -47,7 +48,7 @@ export default class AgendamentoDB {
       const sql = "DELETE FROM agendamento WHERE codigo = ?";
       const valores = [agendamento.codigo];
       await conexao.query(sql, valores);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      /* global.poolConexoes.pool.releaseConnection(conexao); */
     }
   }
 
@@ -57,7 +58,7 @@ export default class AgendamentoDB {
       "SELECT * FROM agendamento as a INNER JOIN usuario as u ON a.cpfUsuario = u.cpf WHERE nome LIKE ?";
     const valores = ["%" + especificidade + "%"];
     const [rows] = await conexao.query(sql, valores);
-    global.poolConexoes.pool.releaseConnection(conexao);
+    /* global.poolConexoes.pool.releaseConnection(conexao); */
 
     const listaAgendamentos = [];
     for (const row of rows) {
@@ -67,7 +68,6 @@ export default class AgendamentoDB {
         row["campo"],
         row["data"],
         row["horario"],
-        row["nomeUsuario"],
         row["cpfUsuario"],
         usuario
       );
@@ -76,12 +76,12 @@ export default class AgendamentoDB {
     return listaAgendamentos;
   }
 
-  async consultarId(codigo) {
+  async consultarCodigo(codigo) {
     const conexao = await conectar();
     const sql = "SELECT * FROM agendamento WHERE codigo =  ?";
     const valores = [codigo];
     const [rows] = await conexao.query(sql, valores);
-    global.poolConexoes.pool.releaseConnection(conexao);
+    /* global.poolConexoes.pool.releaseConnection(conexao); */
 
     const listaAgendamentos = [];
     for (const row of rows) {
@@ -90,7 +90,6 @@ export default class AgendamentoDB {
         row["campo"],
         row["data"],
         row["horario"],
-        row["nomeUsuario"],
         row["cpfUsuario"]
       );
       listaAgendamentos.push(agendamento);

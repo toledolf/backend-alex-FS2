@@ -2,84 +2,38 @@ import Agendamento from "../Modelo/Agendamento.js";
 import Usuario from "../Modelo/Usuario.js";
 
 export default class AgendamentoCTRL {
-  gravar(req, resp) {
+  async gravar(req, resp) {
     resp.type("application/json");
-    if (req.method === "POST") {
+    if (req.method === "POST" && req.is("application/json")) {
       const dados = req.body;
       const campo = dados.campo;
       const data = dados.data;
       const horario = dados.horario;
-      const nomeUsuario = dados.nomeUsuario;
-      const cpfUsuario = dados.cpfUsuario;
-      const usuario = new Usuario(0, "")
-        .consultar(usuario)
-        .then((usuario) => {
-          if (usuario) {
-            const agendamento = new Agendamento(
-              0,
-              campo,
-              data,
-              horario,
-              nomeUsuario,
-              cpfUsuario
-            )
-              .gravar(() => {
-                resp.json({
-                  status: true,
-                  codigo: agendamento.codigo,
-                  mensagem: "Agendamento efetivado com sucesso!",
-                });
-              })
-              .catch((err) => {
-                resp.json({
-                  status: false,
-                  mensagem: err,
-                });
-              });
-          } else {
+      const cpfUsuario = dados.usuario.cpf;
+      const usuario = new Usuario(0, "");
+      const existeUsuario = await usuario.consultarCPF(cpfUsuario);
+      if (existeUsuario) {
+        const agendamento = new Agendamento(0, campo, data, horario, cpfUsuario)
+          .gravar(() => {
             resp.json({
-              status: false,
-              mensagem: "Usuário não encontrato!",
-            });
-          }
-        })
-        .catch((err) => {
-          resp.json({
-            status: false,
-            mensagem: err,
-          });
-        });
-      /* if (campo && data && horario && usuario) {
-        const agendamento = new Agendamento(campo, data, horario, usuario);
-        agendamento
-          .gravar()
-          .then(() => {
-            resp.status(200).json({
               status: true,
-              mensagem: "Agendamento inserido no banco com sucesso!",
+              codigo: agendamento.codigo,
+              mensagem: "Agendamento efetivado com sucesso!",
             });
           })
-          .catch((erro) => {
-            resp.status(500).json({
+          .catch((err) => {
+            console.log(err);
+            resp.json({
               status: false,
-              mensagem: erro.message,
+              mensagem: err,
             });
           });
       } else {
-        resp.status(400).json({
+        resp.json({
           status: false,
-          mensagem:
-            "Informe adequadamente todos os dados de um Agendamento conforme documentação da API!",
+          mensagem: "Usuário não encontrato!",
         });
       }
-    } else {
-      resp.status(400).json({
-        status: false,
-        mensagem:
-          "Método não permitido ou Agendamento no formato JSON não fornecido!\
-                          Consulte a documentação da API.",
-      });
-    } */
     }
   }
 
@@ -91,12 +45,12 @@ export default class AgendamentoCTRL {
       const campo = dados.campo;
       const data = dados.data;
       const horario = dados.horario;
-      const cpfUsuario = dados.cpfUsuario.codigo;
+      const cpfUsuario = dados.usuario.codigo;
       const usuario = new Usuario(0, "")
         .consultarCodigo(cpfUsuario)
         .then((usuario) => {
           if (usuario) {
-            const agendamento = new Agendamento(0, campo, data, horario, cpfUsuario)
+            const agendamento = new Agendamento(0, campo, data, horario, usuario)
               .atualizar(() => {
                 resp.json({
                   status: true,
@@ -123,38 +77,6 @@ export default class AgendamentoCTRL {
             mensagem: err,
           });
         });
-
-      /* if (id && campo && data && horario && usuario) {
-        const agendamento = new Agendamento(id, campo, data, horario, usuario);
-        agendamento
-          .atualizar()
-          .then(() => {
-            resp.status(200).json({
-              status: true,
-              mensagem: "Agendamento atualizado com sucesso!",
-            });
-          })
-          .catch((erro) => {
-            resp.status(500).json({
-              status: false,
-              mensagem: erro.message,
-            });
-          });
-      } else {
-        resp.status(400).json({
-          status: false,
-          mensagem:
-            "Informe adequadamente todos os dados de um Agendamento conforme documentação da API!",
-        });
-      } */
-      /* } else {
-      resp.status(400).json({
-        status: false,
-        mensagem:
-          "Método não permitido ou Agendamento no formato JSON não fornecido!\
-                          Consulte a documentação da API.",
-      });
-    } */
     }
   }
 

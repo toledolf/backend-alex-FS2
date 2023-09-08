@@ -213,6 +213,7 @@ export class UsuarioCTRL {
             mensagem: erro.message,
           });
         });
+        console.log(cpf);
     } else {
       resposta.status(400).json({
         status: false,

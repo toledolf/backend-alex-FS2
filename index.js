@@ -5,8 +5,9 @@ import rotaUsuario from "./Rotas/rotaUsuario.js";
 
 const app = express();
 
-const host = "0.0.0.0";
+const host = "localhost";
 const port = "4002";
+;
 
 app.use(cors({ origin: "*" }));
 
@@ -15,6 +16,16 @@ app.use(express.json());
 app.use("/agendamento", rotaAgendamento);
 app.use("/usuario", rotaUsuario);
 
+/* /* app.listen(port, host, () => {
+  console.log(`API escutando no link: http://${host}/${port}/agendamento`);
+}); */
 app.listen(port, host, () => {
-  console.log(`API escutando no link: https://${host}/${port}`);
+  console.log(`API escutando no link: http://${host}/${port2}`);
 });
+
+/* app.listen(3007, 'localhost', () => {
+  console.log("API escutando no link: http://localhost:3007/usuario")
+})
+app.listen(3008, 'localhost', () => {
+  console.log("API escutando no link: http://localhost:3008/agendamento")
+}) */
