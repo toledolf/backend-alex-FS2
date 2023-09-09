@@ -26,10 +26,12 @@ export default async function conectar() {
 
 /* import mysql from 'mysql2/promise';
 
+let globalConexao = null;
+
 export default async function conectar() {
   try {
-    if (global.conexao && global.conexao.status !== "disconnected") {
-      return global.conexao;
+    if (globalConexao && globalConexao.state !== "disconnected") {
+      return globalConexao;
     }
 
     const conexao = await mysql.createConnection({
@@ -39,12 +41,11 @@ export default async function conectar() {
       database: "backend"
     });
 
-    global.conexao = conexao;
+    globalConexao = conexao;
 
     return conexao;
   } catch (e) {
     console.error("Erro ao conectar ao banco de dados:", e);
-    throw e; // Lança o erro novamente para que quem chame a função possa tratá-lo
+    throw e;
   }
-}
- */
+} */

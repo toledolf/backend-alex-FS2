@@ -12,71 +12,65 @@ export default class AgendamentoCTRL {
       const cpfUsuario = dados.usuario.cpf;
       const usuario = new Usuario(0, "");
       const existeUsuario = await usuario.consultarCPF(cpfUsuario);
+
       if (existeUsuario) {
-        const agendamento = new Agendamento(0, campo, data, horario, cpfUsuario)
-          .gravar(() => {
-            resp.json({
-              status: true,
-              codigo: agendamento.codigo,
-              mensagem: "Agendamento efetivado com sucesso!",
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            resp.json({
-              status: false,
-              mensagem: err,
-            });
+        try {
+          const agendamento = new Agendamento(0, campo, data, horario, cpfUsuario);
+          await agendamento.gravar();
+
+          resp.json({
+            status: true,
+            codigo: agendamento.codigo,
+            mensagem: "Agendamento efetivado com sucesso!",
           });
+        } catch (err) {
+          resp.json({
+            status: false,
+            mensagem: "Usuário não encontrado!",
+          });
+        }
       } else {
         resp.json({
           status: false,
-          mensagem: "Usuário não encontrato!",
+          mensagem: "Usuário não encontrado!",
         });
       }
     }
   }
 
-  atualizar(req, resp) {
+  async atualizar(req, resp) {
     resp.type("application/json");
     if (req.method === "PUT") {
-      const dados = req.body;
-      const codigo = dados.codigo;
-      const campo = dados.campo;
-      const data = dados.data;
-      const horario = dados.horario;
-      const cpfUsuario = dados.usuario.codigo;
-      const usuario = new Usuario(0, "")
-        .consultarCodigo(cpfUsuario)
-        .then((usuario) => {
-          if (usuario) {
-            const agendamento = new Agendamento(0, campo, data, horario, usuario)
-              .atualizar(() => {
-                resp.json({
-                  status: true,
-                  codigo: agendamento.codigo,
-                  mensagem: "Agendamento atualizado com sucesso!",
-                });
-              })
-              .catch((err) => {
-                resp.json({
-                  status: false,
-                  mensagem: err,
-                });
-              });
-          } else {
-            resp.json({
-              status: false,
-              mensagem: "Usuário não encontrato!",
-            });
-          }
-        })
-        .catch((err) => {
+      try {
+        const dados = req.body;
+        const codigo = dados.codigo;
+        const campo = dados.campo;
+        const data = dados.data;
+        const horario = dados.horario;
+        const cpfUsuario = dados.usuario.cpf;
+        const usuario = await new Usuario(0, "").consultarCPF(cpfUsuario);
+
+        if (cpfUsuario) {
+          const agendamento = new Agendamento(codigo, campo, data, horario, cpfUsuario);
+          await agendamento.atualizar();
+
+          resp.json({
+            status: true,
+            codigo: agendamento.codigo,
+            mensagem: "Agendamento atualizado com sucesso!",
+          });
+        } /*  else {
           resp.json({
             status: false,
-            mensagem: err,
+            mensagem: "Usuário não encontrado!",
           });
+        } */
+      } catch (err) {
+        resp.json({
+          status: false,
+          mensagem: "Usuário não encontrado!",
         });
+      }
     }
   }
 
