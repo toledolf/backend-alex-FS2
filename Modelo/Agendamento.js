@@ -1,33 +1,25 @@
 import AgendamentoBD from "../Persistencia/AgendamentoDB.js";
 export default class Agendamento {
-  #codigo;
-  #campo;
+  #id;
   #data;
   #horario;
   #cpfUsuario;
+  #listaCampos;
 
-  constructor(codigo, campo, data, horario, cpfUsuario) {
-    this.#codigo = codigo;
-    this.#campo = campo;
+  constructor(id, data, horario, cpfUsuario, listaCampos) {
+    this.#id = id;
     this.#data = data;
     this.#horario = horario;
     this.#cpfUsuario = cpfUsuario;
+    this.#listaCampos = listaCampos;
   }
 
-  get codigo() {
-    return this.#codigo;
+  get id() {
+    return this.#id;
   }
 
-  set codigo(novoCodigo) {
-    this.#codigo = novoCodigo;
-  }
-
-  get campo() {
-    return this.#campo;
-  }
-
-  set campo(novoCampo) {
-    this.#campo = novoCampo;
+  set id(novoId) {
+    this.#id = novoId;
   }
 
   get data() {
@@ -54,13 +46,21 @@ export default class Agendamento {
     this.#cpfUsuario = novoCpfUsuario;
   }
 
+  get listaCampos() {
+    return this.#listaCampos;
+  }
+
+  set listaCampos(novaListaCampos) {
+    this.#listaCampos = novaListaCampos;
+  }
+
   toJSON() {
     return {
-      codigo: this.#codigo,
-      campo: this.#campo,
+      id: this.#id,
       data: this.#data,
       horario: this.#horario,
       cpfUsuario: this.#cpfUsuario,
+      listaCampos: this.#listaCampos,
     };
   }
 
@@ -69,7 +69,7 @@ export default class Agendamento {
     await agendamentoBD.inserirDados(this);
   }
 
-  async atualizar() {
+  /* async atualizar() {
     const agendamentoBD = new AgendamentoBD();
     await agendamentoBD.alterarDados(this);
   }
@@ -77,17 +77,17 @@ export default class Agendamento {
   async excluirDados() {
     const agendamentoBD = new AgendamentoBD();
     await agendamentoBD.excluirDados(this);
-  }
+  } */
 
   async consultar(especificidade) {
     const agendamentoBD = new AgendamentoBD();
-    const agendamentos = await agendamentoBD.consultarDados(especificidade);
+    const agendamentos = await agendamentoBD.consultar(especificidade);
     return agendamentos;
   }
 
-  async consultarId(codigo) {
+  async consultarId(id) {
     const agendamentoBD = new AgendamentoBD();
-    const agendamentos = await agendamentoBD.consultarId(codigo);
+    const agendamentos = await agendamentoBD.consultarId(id);
     return agendamentos;
   }
 }

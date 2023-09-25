@@ -1,29 +1,31 @@
 import Agendamento from "../Modelo/Agendamento.js";
 import Usuario from "../Modelo/Usuario.js";
 import conectar from "./Conexao.js";
+import Campo from "../Modelo/Campo.js";
 
 export default class AgendamentoDB {
   async inserirDados(agendamento) {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
       if (conexao) {
-        const sql =
-          "INSERT INTO agendamento (campo, data, horario, cpfUsuario) \
-                                           VALUES(?, ?, ?, ?)";
-        const valores = [
-          agendamento.campo,
-          agendamento.data,
-          agendamento.horario,
-          agendamento.cpfUsuario,
-        ];
+        const sql = "INSERT INTO agendamento (data, horario, cpfUsuario) VALUES(?, ?, ?)";
+        const valores = [agendamento.data, agendamento.horario, agendamento.cpfUsuario];
         await conexao.query(sql, valores);
+        /* agendamento.id = result[0].insertId; */
+
+        for (const item of agendamento.listaCampos) {
+          const sql2 =
+            "INSERT INTO agendamento_campo (idCampo, idAgendamento) VALUES (?, ?)";
+          const params = [item.id, agendamento.id];
+          await conexao.query(sql2, params);
+        }
       }
 
       global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
-  async alterarDados(agendamento) {
+  /* async alterarDados(agendamento) {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
       const sql =
@@ -38,62 +40,95 @@ export default class AgendamentoDB {
         agendamento.codigo,
       ];
       await conexao.query(sql, valores);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      //global.poolConexoes.pool.releaseConnection(conexao);
     }
-  }
+  } */
 
-  async excluirDados(agendamento) {
+  /* async excluirDados(agendamento) {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
       const sql = "DELETE FROM agendamento WHERE codigo = ?";
       const valores = [agendamento.codigo];
       await conexao.query(sql, valores);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      //global.poolConexoes.pool.releaseConnection(conexao);
     }
-  }
+  } */
 
-  async consultarDados(especificidade) {
+  async consultar() {
+    const listaAgendamentos = [];
     const conexao = await conectar();
     const sql =
-      "SELECT * FROM agendamento as a INNER JOIN usuario as u ON a.cpfUsuario = u.cpf WHERE nome LIKE ?";
-    const valores = ["%" + especificidade + "%"];
-    const [rows] = await conexao.query(sql, valores);
+      "SELECT * FROM agendamento as a INNER JOIN usuario as u ON u.cpf = a.cpfUsuario";
+
+    const [agendamentos] = await conexao.query(sql);
     global.poolConexoes.pool.releaseConnection(conexao);
 
-    const listaAgendamentos = [];
-    for (const row of rows) {
-      const usuario = new Usuario(row["cpfUsuario"], row["nome"]);
+
+    for (const linha of agendamentos) {
+      const usuario = new Usuario(linha["cpf"], linha["nome"]);
       const agendamento = new Agendamento(
-        row["codigo"],
-        row["campo"],
-        row["data"],
-        row["horario"],
-        row["cpfUsuario"],
-        usuario
+        linha["id"],
+        linha["data"],
+        linha["horario"],
+        usuario,
+        []
       );
+      const sql2Items =
+        "SELECT * FROM campo as c INNER JOIN agendamento_campo as i ON c.id = i.idCampo";
+
+      const params = [agendamento.id];
+      const [agendamentoCampos] = await conexao.query(sql2Items, params);
+      global.poolConexoes.pool.releaseConnection(conexao);
+
+      let listaCampos = [];
+
+      for (const item of agendamentoCampos) {
+        const campo = new Campo(item["id"], item["corReferencial"], item["descricao"]);
+        listaCampos.push(campo);
+      }
+      agendamento.listaCampos = listaCampos;
       listaAgendamentos.push(agendamento);
     }
+
     return listaAgendamentos;
   }
 
-  async consultarCodigo(codigo) {
+  async consultarId(id) {
+    const listaAgendamentos = [];
     const conexao = await conectar();
-    const sql = "SELECT * FROM agendamento WHERE codigo =  ?";
-    const valores = [codigo];
-    const [rows] = await conexao.query(sql, valores);
+    const sql =
+      "SELECT * FROM agendamento as a INNER JOIN usuario as u ON u.cpf = a.cpfUsuario WHERE a.id = ?";
+
+    const [agendamentos] = await conexao.query(sql, [id]);
     global.poolConexoes.pool.releaseConnection(conexao);
 
-    const listaAgendamentos = [];
-    for (const row of rows) {
+
+    for (const linha of agendamentos) {
+      const usuario = new Usuario(linha["cpf"], linha["nome"]);
       const agendamento = new Agendamento(
-        row["codigo"],
-        row["campo"],
-        row["data"],
-        row["horario"],
-        row["cpfUsuario"]
+        linha["id"],
+        linha["data"],
+        linha["horario"],
+        usuario,
+        []
       );
+      const sql2Items =
+        "SELECT * FROM campo as c INNER JOIN agendamento_campo as i ON c.id = i.idCampo";
+
+      const params = [agendamento.id];
+      const [agendamentoCampos] = await conexao.query(sql2Items, params);
+      global.poolConexoes.pool.releaseConnection(conexao);
+
+      let listaCampos = [];
+
+      for (const item of agendamentoCampos) {
+        const campo = new Campo(item["id"], item["corReferencial"], item["descricao"]);
+        listaCampos.push(campo);
+      }
+      agendamento.listaCampos = listaCampos;
       listaAgendamentos.push(agendamento);
     }
+
     return listaAgendamentos;
   }
 }

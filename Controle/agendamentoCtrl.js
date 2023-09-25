@@ -1,44 +1,47 @@
 import Agendamento from "../Modelo/Agendamento.js";
+import AgendamentoCampo from "../Modelo/AgendamentoCampo.js";
 import Usuario from "../Modelo/Usuario.js";
+import Campo from "../Modelo/Campo.js";
 
 export default class AgendamentoCTRL {
   async gravar(req, resp) {
     resp.type("application/json");
-    if (req.method === "POST" && req.is("application/json")) {
+    if (req.method === "POST") {
       const dados = req.body;
-      const campo = dados.campo;
       const data = dados.data;
       const horario = dados.horario;
-      const cpfUsuario = dados.usuario.cpf;
-      const usuario = new Usuario(0, "");
-      const existeUsuario = await usuario.consultarCPF(cpfUsuario);
+      const cpfUsuario = new Usuario(dados.usuario.cpf);
+      const campos = dados.listaCampos;
 
-      if (existeUsuario) {
-        try {
-          const agendamento = new Agendamento(0, campo, data, horario, cpfUsuario);
-          await agendamento.gravar();
+      const listaCampos = [];
 
-          resp.json({
-            status: true,
-            codigo: agendamento.codigo,
-            mensagem: "Agendamento efetivado com sucesso!",
-          });
-        } catch (err) {
-          resp.json({
-            status: false,
-            mensagem: "Usuário não encontrado!",
-          });
-        }
-      } else {
+      for (const item of campos) {
+        const campo = new Campo(item.id);
+        const agendamentoCampo = new AgendamentoCampo(campo);
+        listaCampos.push(agendamentoCampo);
+      }
+      try {
+        const agendamento = new Agendamento(0, data, horario, cpfUsuario, listaCampos);
+        await agendamento.gravar();
+        resp.json({
+          status: true,
+          mensagem: "Agendamento gravado com sucesso!",
+        });
+      } catch (erro) {
         resp.json({
           status: false,
-          mensagem: "Usuário não encontrado!",
+          mensagem: erro.message,
         });
       }
+    } else {
+      resp.status(400).json({
+        status: false,
+        mensagem: "Método não permitido!",
+      });
     }
   }
 
-  async atualizar(req, resp) {
+  /* async atualizar(req, resp) {
     resp.type("application/json");
     if (req.method === "PUT") {
       try {
@@ -59,12 +62,12 @@ export default class AgendamentoCTRL {
             codigo: agendamento.codigo,
             mensagem: "Agendamento atualizado com sucesso!",
           });
-        } /*  else {
+        }  else {
           resp.json({
             status: false,
             mensagem: "Usuário não encontrado!",
           });
-        } */
+        }
       } catch (err) {
         resp.json({
           status: false,
@@ -72,9 +75,9 @@ export default class AgendamentoCTRL {
         });
       }
     }
-  }
+  } */
 
-  excluir(req, resp) {
+  /* excluir(req, resp) {
     resp.type("application/json");
     if (req.method === "DELETE") {
       const dados = req.body;
@@ -110,40 +113,42 @@ export default class AgendamentoCTRL {
                           Consulte a documentação da API.",
       });
     }
-  }
+  } */
 
   consultar(req, resp) {
     resp.type("application/json");
     if (req.method === "GET") {
+      const id = req.query.id;
       const agendamento = new Agendamento();
-      agendamento
-        .consultar("")
-        .then((agendamentos) => {
-          resp.status(200).json(agendamentos);
-        })
-        .catch((erro) => {
-          resp.status(500).json({
-            status: false,
-            mensagem: erro.message,
+      if (id) {
+        agendamento
+          .consultarId(id)
+          .then((agendamento) => {
+            resp.status(200).json(agendamento);
+          })
+          .catch((erro) => {
+            resp.status(500).json({
+              status: false,
+              mensagem: erro.message,
+            });
           });
+      } else {
+        agendamento.consultar().then((agendamentos) => {
+          resp.status(200).json(agendamentos);
         });
-    } else {
-      resp.status(400).json({
-        status: false,
-        mensagem: "Método não permitido! Consulte a documentação da API.",
-      });
+      }
     }
   }
 
-  consultarPorCodigo(req, resp) {
+  consultarPorId(req, resp) {
     resp.type("application/json");
 
-    const codigo = req.params["codigo"];
+    const id = req.params["id"];
 
     if (req.method === "GET") {
       const agendamento = new Agendamento();
       agendamento
-        .consultarCodigo(codigo)
+        .consultarId(id)
         .then((agendamento) => {
           resp.status(200).json(agendamento);
         })
