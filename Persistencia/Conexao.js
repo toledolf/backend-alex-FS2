@@ -5,7 +5,7 @@ export default async function conectar() {
     return await global.poolConexoes.getConnection();
   }
 
-  const poolConexoes = await mysql.createPool({
+  const poolConexoes = mysql.createPool({
     host: "localhost",
     user: "aluno2-pfsii",
     port: 3306,
