@@ -10,6 +10,6 @@ rotaCampo
   .get("/", campoCtrl.consultar)
   .post("/", campoCtrl.gravar)
   .put("/", campoCtrl.atualizar)
-  .delete("/", campoCtrl.excluir)
+  /* .delete("/", campoCtrl.excluir) */
 
 export default rotaCampo;

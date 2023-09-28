@@ -10,6 +10,5 @@ rotaAgendamento
   .post("/", agendamentoCtrl.gravar)
   /* .put("/", agendamentoCtrl.atualizar)
   .delete("/", agendamentoCtrl.excluir) */
-  /* .get("/:codigo", agendamentoCtrl.consultarPorCodigo); */
 
 export default rotaAgendamento;
