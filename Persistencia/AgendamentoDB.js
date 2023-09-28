@@ -8,20 +8,24 @@ export default class AgendamentoDB {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
       if (conexao) {
-        const sql = "INSERT INTO agendamento (data, horario, cpfUsuario) VALUES(?, ?, ?)";
-        const valores = [agendamento.data, agendamento.horario, agendamento.cpfUsuario];
-        await conexao.query(sql, valores);
-        /* agendamento.id = result[0].insertId; */
+        try {
+          const sql =
+            "INSERT INTO agendamento (data, horario, cpfUsuario) VALUES (?, ?, ?)";
+          const valores = [agendamento.data, agendamento.horario, agendamento.cpfUsuario];
+          const resultado = await conexao.query(sql, valores);
 
-        for (const item of agendamento.listaCampos) {
-          const sql2 =
-            "INSERT INTO agendamento_campo (idCampo, idAgendamento) VALUES (?, ?)";
-          const params = [item.id, agendamento.id];
-          await conexao.query(sql2, params);
+          const idAgendamento = resultado[0].insertId;
+
+          for (const item of agendamento.listaCampos) {
+            const sql2 =
+              "INSERT INTO agendamento_campo (idCampo, idAgendamento) VALUES (?, ?)";
+            const params = [item.idCampo, idAgendamento];
+            await conexao.query(sql2, params);
+          }
+        } catch (erro) {
+          throw erro;
         }
       }
-
-      global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -61,8 +65,7 @@ export default class AgendamentoDB {
       "SELECT * FROM agendamento as a INNER JOIN usuario as u ON u.cpf = a.cpfUsuario";
 
     const [agendamentos] = await conexao.query(sql);
-    global.poolConexoes.pool.releaseConnection(conexao);
-
+    //global.poolConexoes.pool.releaseConnection(conexao);
 
     for (const linha of agendamentos) {
       const usuario = new Usuario(linha["cpf"], linha["nome"]);
@@ -78,7 +81,7 @@ export default class AgendamentoDB {
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      //global.poolConexoes.pool.releaseConnection(conexao);
 
       let listaCampos = [];
 
@@ -100,8 +103,7 @@ export default class AgendamentoDB {
       "SELECT * FROM agendamento as a INNER JOIN usuario as u ON u.cpf = a.cpfUsuario WHERE a.id = ?";
 
     const [agendamentos] = await conexao.query(sql, [id]);
-    global.poolConexoes.pool.releaseConnection(conexao);
-
+    //global.poolConexoes.pool.releaseConnection(conexao);
 
     for (const linha of agendamentos) {
       const usuario = new Usuario(linha["cpf"], linha["nome"]);
@@ -117,7 +119,7 @@ export default class AgendamentoDB {
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      //global.poolConexoes.pool.releaseConnection(conexao);
 
       let listaCampos = [];
 

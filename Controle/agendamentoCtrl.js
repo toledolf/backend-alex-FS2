@@ -1,42 +1,47 @@
 import Agendamento from "../Modelo/Agendamento.js";
-import AgendamentoCampo from "../Modelo/AgendamentoCampo.js";
+import AgendamentoCampo from "../Modelo/agendamentoCampo.js";
 import Usuario from "../Modelo/Usuario.js";
-import Campo from "../Modelo/Campo.js";
 
 export default class AgendamentoCTRL {
   async gravar(req, resp) {
     resp.type("application/json");
-    if (req.method === "POST") {
-      const dados = req.body;
-      const data = dados.data;
-      const horario = dados.horario;
-      const cpfUsuario = new Usuario(dados.usuario.cpf);
-      const campos = dados.listaCampos;
 
-      const listaCampos = [];
+    if (req.method !== "POST") {
+      return;
+    }
 
-      for (const item of campos) {
-        const campo = new Campo(item.id);
-        const agendamentoCampo = new AgendamentoCampo(campo);
-        listaCampos.push(agendamentoCampo);
-      }
-      try {
-        const agendamento = new Agendamento(0, data, horario, cpfUsuario, listaCampos);
+    try {
+      const {
+        data,
+        horario,
+        usuario: { cpf },
+        listaCampos,
+      } = req.body;
+
+      const camposAgendamento = listaCampos.map(
+        (item) => new AgendamentoCampo(item.idAgendamento, item.idCampo)
+      );
+
+      const agendamento = new Agendamento(0, data, horario, cpf, camposAgendamento);
+      const usuario = await new Usuario(0, "").consultarCPF(cpf);
+
+      if (cpf) {
         await agendamento.gravar();
-        resp.json({
+        resp.status(200).json({
           status: true,
           mensagem: "Agendamento gravado com sucesso!",
         });
-      } catch (erro) {
-        resp.json({
+      }
+      if (!cpf) {
+        resp.status(400).json({
           status: false,
-          mensagem: erro.message,
+          mensagem: "Usuário não encontrado!",
         });
       }
-    } else {
-      resp.status(400).json({
+    } catch (erro) {
+      resp.json({
         status: false,
-        mensagem: "Método não permitido!",
+        mensagem: erro.message,
       });
     }
   }

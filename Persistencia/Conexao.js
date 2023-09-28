@@ -1,4 +1,4 @@
-import mysql from "mysql2/promise";
+/* import mysql from "mysql2/promise";
 
 export default async function conectar() {
   if (global.poolConexoes) {
@@ -22,23 +22,24 @@ export default async function conectar() {
   global.poolConexoes = poolConexoes;
 
   return await poolConexoes.getConnection();
-}
+} */
 
-/* import mysql from 'mysql2/promise';
+import mysql from "mysql2/promise";
 
 let globalConexao = null;
 
-export default async function conectar() {
+export default async function Conectar() {
   try {
     if (globalConexao && globalConexao.state !== "disconnected") {
-      return globalConexao;
+      await globalConexao.end();
+      globalConexao = null;
     }
 
     const conexao = await mysql.createConnection({
       host: "localhost",
       user: "root",
       password: "",
-      database: "backend"
+      database: "backend",
     });
 
     globalConexao = conexao;
@@ -48,4 +49,4 @@ export default async function conectar() {
     console.error("Erro ao conectar ao banco de dados:", e);
     throw e;
   }
-} */
+}

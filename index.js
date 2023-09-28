@@ -6,8 +6,8 @@ import rotaCampo from "./Rotas/rotaCampo.js";
 
 const app = express();
 
-const host = "localhost";
-const port = "4002";
+/* const host = "localhost";
+const port = "4002"; */
 
 app.use(cors({ origin: "*" }));
 
@@ -17,11 +17,11 @@ app.use("/agendamento", rotaAgendamento);
 app.use("/usuario", rotaUsuario);
 app.use("/campo", rotaCampo);
 
-app.listen(port, host, () => {
+/* app.listen(port, host, () => {
   console.log(`API escutando no link: https://${host}/${port}`);
-});
+}); */
 
-/* app.listen(3007, "localhost", () => {
+app.listen(3007, "localhost", () => {
   console.log("API escutando no link: http://localhost:3007/usuario");
 });
 
@@ -32,4 +32,4 @@ app.listen(3008, "localhost", () => {
 app.listen(3009, "localhost", () => {
   console.log("API escutando no link: http://localhost:3009/campo");
 });
- */
+

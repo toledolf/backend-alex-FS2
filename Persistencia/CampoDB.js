@@ -13,7 +13,7 @@ export default class CamposBD {
         await conexao.query(sql, valores);
       }
 
-      global.poolConexoes.pool.releaseConnection(conexao);
+     // global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -29,7 +29,7 @@ export default class CamposBD {
         campo.id,
       ];
       await conexao.query(sql, valores);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      //global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -49,7 +49,7 @@ export default class CamposBD {
       "SELECT * FROM campo WHERE corReferencial LIKE ?";
     const valores = ["%" + especificidade + "%"];
     const [rows] = await conexao.query(sql, valores);
-    global.poolConexoes.pool.releaseConnection(conexao);
+    //global.poolConexoes.pool.releaseConnection(conexao);
 
     const listaCampos = [];
     for (const row of rows) {
@@ -68,7 +68,7 @@ export default class CamposBD {
     const sql = "SELECT * FROM campo WHERE id =  ?";
     const valores = [id];
     const [rows] = await conexao.query(sql, valores);
-    global.poolConexoes.pool.releaseConnection(conexao);
+    //global.poolConexoes.pool.releaseConnection(conexao);
 
     const listaCampos = [];
     for (const row of rows) {
