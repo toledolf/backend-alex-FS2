@@ -1,48 +1,40 @@
 import Agendamento from "../Modelo/Agendamento.js";
-import AgendamentoCampo from "../Modelo/agendamentoCampo.js";
 import Usuario from "../Modelo/Usuario.js";
 
 export default class AgendamentoCTRL {
   async gravar(req, resp) {
     resp.type("application/json");
 
-    if (req.method !== "POST") {
-      return;
-    }
+    if (req.method === "POST") {
+      const dados = req.body;
+      const data = dados.data;
+      const horario = dados.horario;
+      const cpfUsuario = dados.usuario.cpf;
+      const listaCampos = dados.listaCampos;
 
-    try {
-      const {
-        data,
-        horario,
-        usuario: { cpf },
-        listaCampos,
-      } = req.body;
+      try {
+        const agendamento = new Agendamento(0, data, horario, cpfUsuario, listaCampos);
+        const usuario = await new Usuario(0, "").consultarCPF(cpfUsuario);
 
-      const camposAgendamento = listaCampos.map(
-        (item) => new AgendamentoCampo(item.idAgendamento, item.idCampo)
-      );
-
-      const agendamento = new Agendamento(0, data, horario, cpf, camposAgendamento);
-      const usuario = await new Usuario(0, "").consultarCPF(cpf);
-
-      if (cpf) {
-        await agendamento.gravar();
-        resp.status(200).json({
-          status: true,
-          mensagem: "Agendamento gravado com sucesso!",
-        });
-      }
-      if (!cpf) {
-        resp.status(400).json({
+        if (cpfUsuario) {
+          await agendamento.gravar();
+          resp.status(200).json({
+            status: true,
+            mensagem: "Agendamento gravado com sucesso!",
+          });
+        }
+        if (!cpfUsuario) {
+          resp.status(400).json({
+            status: false,
+            mensagem: "Usuário não encontrado!",
+          });
+        }
+      } catch (erro) {
+        resp.json({
           status: false,
-          mensagem: "Usuário não encontrado!",
+          mensagem: erro.message,
         });
       }
-    } catch (erro) {
-      resp.json({
-        status: false,
-        mensagem: erro.message,
-      });
     }
   }
 

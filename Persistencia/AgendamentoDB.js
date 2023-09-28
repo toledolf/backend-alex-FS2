@@ -77,7 +77,7 @@ export default class AgendamentoDB {
         []
       );
       const sql2Items =
-        "SELECT * FROM campo as c INNER JOIN agendamento_campo as i ON c.id = i.idCampo";
+        "SELECT * FROM campo as c INNER JOIN agendamento_campo as i ON c.id = i.idCampo WHERE i.idAgendamento = ?";
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
@@ -115,7 +115,7 @@ export default class AgendamentoDB {
         []
       );
       const sql2Items =
-        "SELECT * FROM campo as c INNER JOIN agendamento_campo as i ON c.id = i.idCampo";
+        "SELECT * FROM campo as c INNER JOIN agendamento_campo as i ON c.id = i.idCampo WHERE i.idAgendamento = ?";
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
