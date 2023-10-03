@@ -69,7 +69,7 @@ export default class Agendamento {
     await agendamentoBD.inserirDados(this);
   }
 
-  /* async atualizar() {
+  async atualizar() {
     const agendamentoBD = new AgendamentoBD();
     await agendamentoBD.alterarDados(this);
   }
@@ -77,7 +77,7 @@ export default class Agendamento {
   async excluirDados() {
     const agendamentoBD = new AgendamentoBD();
     await agendamentoBD.excluirDados(this);
-  } */
+  }
 
   async consultar(especificidade) {
     const agendamentoBD = new AgendamentoBD();

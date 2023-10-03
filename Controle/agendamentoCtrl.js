@@ -38,28 +38,26 @@ export default class AgendamentoCTRL {
     }
   }
 
-  /* async atualizar(req, resp) {
+  async atualizar(req, resp) {
     resp.type("application/json");
     if (req.method === "PUT") {
       try {
         const dados = req.body;
-        const codigo = dados.codigo;
-        const campo = dados.campo;
+        const id = dados.id;
         const data = dados.data;
         const horario = dados.horario;
-        const cpfUsuario = dados.usuario.cpf;
-        const usuario = await new Usuario(0, "").consultarCPF(cpfUsuario);
+        const agendamento = await new Agendamento(0, "").consultar(id);
 
-        if (cpfUsuario) {
-          const agendamento = new Agendamento(codigo, campo, data, horario, cpfUsuario);
+        if (id) {
+          const agendamento = new Agendamento(id, data, horario);
           await agendamento.atualizar();
 
           resp.json({
             status: true,
-            codigo: agendamento.codigo,
+            codigo: agendamento.id,
             mensagem: "Agendamento atualizado com sucesso!",
           });
-        }  else {
+        } else {
           resp.json({
             status: false,
             mensagem: "Usuário não encontrado!",
@@ -72,29 +70,38 @@ export default class AgendamentoCTRL {
         });
       }
     }
-  } */
+  }
 
-  /* excluir(req, resp) {
+  async excluir(req, resp) {
     resp.type("application/json");
     if (req.method === "DELETE") {
       const dados = req.body;
-      const codigo = dados.codigo;
-      if (codigo) {
-        const agendamento = new Agendamento(codigo);
-        agendamento
-          .excluirDados()
-          .then(() => {
+      const idAgendamento = dados.agendamento_campo.idAgendamento;
+      const agendamentoID = dados.agendamento.id;
+
+      if (idAgendamento && agendamentoID) {
+        try {
+          const agendamento = new Agendamento(idAgendamento);
+          const result = await agendamento.consultarId(idAgendamento);
+
+          if (result.length > 0 && result[0].id === agendamentoID) {
+            agendamento.excluirDados();
             resp.status(200).json({
               status: true,
               mensagem: "Agendamento excluído com sucesso!",
             });
-          })
-          .catch((erro) => {
-            resp.status(500).json({
+          } else {
+            resp.status(400).json({
               status: false,
-              mensagem: erro.message,
+              mensagem: "Agendamento não encontrado!",
             });
+          }
+        } catch (erro) {
+          resp.status(500).json({
+            status: false,
+            mensagem: erro.message,
           });
+        }
       } else {
         resp.status(400).json({
           status: false,
@@ -106,11 +113,10 @@ export default class AgendamentoCTRL {
       resp.status(400).json({
         status: false,
         mensagem:
-          "Método não permitido ou cliente no formato JSON não fornecido!\
-                          Consulte a documentação da API.",
+          "Método não permitido ou cliente no formato JSON não fornecido! Consulte a documentação da API.",
       });
     }
-  } */
+  }
 
   consultar(req, resp) {
     resp.type("application/json");

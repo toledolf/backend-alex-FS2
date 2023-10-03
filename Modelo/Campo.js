@@ -1,46 +1,46 @@
 import CampoDB from "../Persistencia/CampoDB.js";
 
-export default class Campo{
-  #id
-  #corReferencial
-  #descricao
+export default class Campo {
+  #id;
+  #corReferencial;
+  #descricao;
 
-  constructor(id, corReferencial, descricao){
-    this.#id = id
-    this.#corReferencial = corReferencial
-    this.#descricao = descricao
+  constructor(id, corReferencial, descricao) {
+    this.#id = id;
+    this.#corReferencial = corReferencial;
+    this.#descricao = descricao;
   }
 
-  get id(){
-    return this.#id
+  get id() {
+    return this.#id;
   }
 
-  set id(novoId){
-    this.#id = novoId
+  set id(novoId) {
+    this.#id = novoId;
   }
 
-  get corReferencial(){
-    return this.#corReferencial
+  get corReferencial() {
+    return this.#corReferencial;
   }
 
-  set corReferencial(novaCorReferencial){
-    this.#corReferencial = novaCorReferencial
+  set corReferencial(novaCorReferencial) {
+    this.#corReferencial = novaCorReferencial;
   }
 
-  get descricao(){
-    return this.#descricao
+  get descricao() {
+    return this.#descricao;
   }
 
-  set descricao(novaDescricao){
-    this.#descricao = novaDescricao
+  set descricao(novaDescricao) {
+    this.#descricao = novaDescricao;
   }
 
-  toJSON(){
+  toJSON() {
     return {
       id: this.#id,
       corReferencial: this.#corReferencial,
-      descricao: this.#descricao
-    }
+      descricao: this.#descricao,
+    };
   }
 
   async gravar() {

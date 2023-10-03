@@ -21,7 +21,7 @@ export default class AgendamentoDB {
               "INSERT INTO agendamento_campo (idCampo, idAgendamento) VALUES (?, ?)";
             const params = [item.idCampo, idAgendamento];
             await conexao.query(sql2, params);
-            global.poolConexoes.pool.releaseConnection(conexao);
+            //global.poolConexoes.pool.releaseConnection(conexao);
           }
         } catch (erro) {
           throw erro;
@@ -30,34 +30,29 @@ export default class AgendamentoDB {
     }
   }
 
-  /* async alterarDados(agendamento) {
+  async alterarDados(agendamento) {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
       const sql =
-        "UPDATE agendamento SET campo = ?, data = ?, horario = ?, \
-                                         cpfUsuario = ? \
-                         WHERE codigo = ?";
-      const valores = [
-        agendamento.campo,
-        agendamento.data,
-        agendamento.horario,
-        agendamento.cpfUsuario,
-        agendamento.codigo,
-      ];
+        "UPDATE agendamento SET data = ?, horario = ? WHERE agendamento.id = ? ";
+      const valores = [agendamento.data, agendamento.horario, agendamento.id];
       await conexao.query(sql, valores);
       //global.poolConexoes.pool.releaseConnection(conexao);
     }
-  } */
+  }
 
-  /* async excluirDados(agendamento) {
+  async excluirDados(agendamento) {
     if (agendamento instanceof Agendamento) {
       const conexao = await conectar();
-      const sql = "DELETE FROM agendamento WHERE codigo = ?";
-      const valores = [agendamento.codigo];
+      const sql = "DELETE FROM agendamento_campo WHERE idAgendamento = ?";
+      const sql2 = "DELETE FROM agendamento WHERE id = ?";
+      const valores = [agendamento.id];
+      const valores2 = [agendamento.id];
       await conexao.query(sql, valores);
+      await conexao.query(sql2, valores2);
       //global.poolConexoes.pool.releaseConnection(conexao);
     }
-  } */
+  }
 
   async consultar() {
     const listaAgendamentos = [];
@@ -82,7 +77,7 @@ export default class AgendamentoDB {
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      //global.poolConexoes.pool.releaseConnection(conexao);
       let listaCampos = [];
 
       for (const item of agendamentoCampos) {
@@ -118,7 +113,7 @@ export default class AgendamentoDB {
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
-      global.poolConexoes.pool.releaseConnection(conexao);
+      //global.poolConexoes.pool.releaseConnection(conexao);
 
       let listaCampos = [];
 
