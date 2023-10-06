@@ -19,7 +19,7 @@ export default class UsuarioBD {
         usuario.jogador,
       ];
       await conexao.query(sql, valores);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -41,7 +41,7 @@ export default class UsuarioBD {
         usuario.cpf,
       ];
       await conexao.query(sql, valores);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -60,7 +60,7 @@ export default class UsuarioBD {
     const sql = "SELECT * FROM usuario WHERE nome LIKE ?";
     const valores = ["%" + termo + "%"];
     const [rows] = await conexao.query(sql, valores);
-    //global.poolConexoes.pool.releaseConnection(conexao);
+    global.poolConexoes.pool.releaseConnection(conexao);
 
     const listaUsuarios = [];
     for (const row of rows) {
@@ -85,7 +85,7 @@ export default class UsuarioBD {
     const sql = "SELECT * FROM usuario WHERE cpf = ?";
     const valores = [cpf];
     const [rows] = await conexao.query(sql, valores);
-    //global.poolConexoes.pool.releaseConnection(conexao);
+    global.poolConexoes.pool.releaseConnection(conexao);
 
     const listaUsuarios = [];
     for (const row of rows) {

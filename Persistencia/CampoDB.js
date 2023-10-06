@@ -11,7 +11,7 @@ export default class CamposBD {
                                            VALUES(?, ?)";
         const valores = [campo.corReferencial, campo.descricao];
         await conexao.query(sql, valores);
-        //global.poolConexoes.pool.releaseConnection(conexao);
+        global.poolConexoes.pool.releaseConnection(conexao);
       }
     }
   }
@@ -24,7 +24,7 @@ export default class CamposBD {
                          WHERE id = ?";
       const valores = [campo.corReferencial, campo.descricao, campo.id];
       await conexao.query(sql, valores);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -34,7 +34,7 @@ export default class CamposBD {
       const sql = "DELETE FROM campo WHERE id = ?";
       const valores = [campo.id];
       await conexao.query(sql, valores);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -43,7 +43,7 @@ export default class CamposBD {
     const sql = "SELECT * FROM campo WHERE corReferencial LIKE ?";
     const valores = ["%" + especificidade + "%"];
     const [rows] = await conexao.query(sql, valores);
-    //global.poolConexoes.pool.releaseConnection(conexao);
+    global.poolConexoes.pool.releaseConnection(conexao);
 
 
     const listaCampos = [];
@@ -59,7 +59,7 @@ export default class CamposBD {
     const sql = "SELECT * FROM campo WHERE id =  ?";
     const valores = [id];
     const [rows] = await conexao.query(sql, valores);
-    //global.poolConexoes.pool.releaseConnection(conexao);
+    global.poolConexoes.pool.releaseConnection(conexao);
 
     const listaCampos = [];
     for (const row of rows) {

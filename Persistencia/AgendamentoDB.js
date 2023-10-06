@@ -21,7 +21,7 @@ export default class AgendamentoDB {
               "INSERT INTO agendamento_campo (idCampo, idAgendamento) VALUES (?, ?)";
             const params = [item.idCampo, idAgendamento];
             await conexao.query(sql2, params);
-            //global.poolConexoes.pool.releaseConnection(conexao);
+            global.poolConexoes.pool.releaseConnection(conexao);
           }
         } catch (erro) {
           throw erro;
@@ -37,7 +37,7 @@ export default class AgendamentoDB {
         "UPDATE agendamento SET data = ?, horario = ? WHERE agendamento.id = ? ";
       const valores = [agendamento.data, agendamento.horario, agendamento.id];
       await conexao.query(sql, valores);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -50,7 +50,7 @@ export default class AgendamentoDB {
       const valores2 = [agendamento.id];
       await conexao.query(sql, valores);
       await conexao.query(sql2, valores2);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
     }
   }
 
@@ -61,7 +61,7 @@ export default class AgendamentoDB {
       "SELECT * FROM agendamento as a INNER JOIN usuario as u ON u.cpf = a.cpfUsuario";
 
     const [agendamentos] = await conexao.query(sql);
-    //global.poolConexoes.pool.releaseConnection(conexao);
+    global.poolConexoes.pool.releaseConnection(conexao);
 
     for (const linha of agendamentos) {
       const usuario = new Usuario(linha["cpf"], linha["nome"]);
@@ -77,7 +77,7 @@ export default class AgendamentoDB {
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
       let listaCampos = [];
 
       for (const item of agendamentoCampos) {
@@ -113,7 +113,7 @@ export default class AgendamentoDB {
 
       const params = [agendamento.id];
       const [agendamentoCampos] = await conexao.query(sql2Items, params);
-      //global.poolConexoes.pool.releaseConnection(conexao);
+      global.poolConexoes.pool.releaseConnection(conexao);
 
       let listaCampos = [];
 
